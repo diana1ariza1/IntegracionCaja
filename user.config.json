@@ -1,0 +1,17 @@
+{
+    "tipo_conexion": "COM",
+    "puerto": "COM1",
+    "config_conexion": [9600, "N", 8, 1],
+    "sleep": 5,   
+    "time_out": 15,
+    "visible": 4,
+    "cajero": 1,
+    "archivo_solicitud": "entrada.txt",
+    "archivo_respuesta": "respuesta.txt",
+    "borrar_archivos": 2,
+    "datos_respuesta": ["cod_cajero","tarjeta", "tipo_cuenta", "franquicia", "monto_transaccion", "nro_recibo", "cuotas", "nro_terminal", "cod_establecimiento", "fecha", "hora"],
+    "previa": 0,
+    "log_transaccional": 1,
+    "log_errores": 1,
+    "confirmar": 0
+}

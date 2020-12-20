@@ -1,0 +1,95 @@
+{
+    "message_definition":{
+        "structure": ["CONFIRM_MESSAGE", "STX", "BCD", "DATA", "ETX", "LRC"],
+        "CONFIRM_MESSAGE": {"value": null,"max_length": 1, "description": "Indica si el mensaje fue entendido (06h) o no (15h)"},
+        "STX": {"value":"02", "max_length": 1, "description": "Indica el inicio del mensaje (02h)"},
+        "BCD": {"value":null, "max_length": 2, "description": "Calculo de la longitud del mensaje"},
+        "DATA": {"value": null, "max_length": 0, "description": "Se envian los datos de la transaccion"},
+        "ETX": {"value":"03", "max_length": 1, "description": "Indica el fin del mensaje (03h)"},
+        "LRC": {"value":null, "max_length": 1, "description": "Operación XOR entre cada byte desde BCD hasta el ETX"}
+    },
+    "values_confirm_message":{
+        "UNDERSTOOD": "06",
+        "NOT_UNDERSTOOD": "15"
+    },
+    "flows":{
+        "00": {"is_unified": false, "operation_field": null},
+        "99": {"is_unified": true, "operation_field": "C69"}
+    },
+    "data_frame": {
+        "header_structure": [
+            "transport_header","version", "req_res",
+            "cod_trans", "cod_res", "indicator", "separador_campo"
+        ],
+        "transport_header": {"value": "6000000000", "max_length": 10, "description": "Cabecera principal del mensaje"},
+        "version": {"value": "1", "max_length": 1, "description": "Siempre fijo en 1"},
+        "req_res": {"value": ["0", "1", "2"], "max_length": 1, "description": "Identifica el tipo de mensaje"},
+        "cod_trans": {"value": null, "max_length": 2, "description": "Identifica el tipo de transaccion"},
+        "cod_res": {"value": "00", "max_length": 2, "description": "Indica resultado del requerimiento de transacción."},
+        "indicator": {"value": "0", "max_length": 1, "description": "Siempre 0"},
+        "separador_campo": {"value": "1C", "max_length": 1, "description": "Indica el separador de Campo. Debe ser un hexadecimal"}
+    },
+    "operations": {
+        "00": [
+            ["C40"],
+            ["C33", "C40", "C41", "C42", "C44", "C66"],
+            ["C33", "C40", "C41", "C42", "C43","C44", "C66"],
+            ["C33", "C40", "C41", "C42", "C44", "C66", "C95"],
+            ["C33", "C11", "C40", "C41", "C42", "C44", "C66", "C95"]
+        ],
+        "02": ["C33", "C65", "C66", "C84"],
+        "03": ["C33", "C84"],
+        "04": ["C33", "C40"],
+        "06": ["C33", "C40"],
+        "09": ["C30", "C40", "C41", "C44", "C70", "C84"],
+        "14": ["C30", "C33", "C40", "C69", "C89", "C93"],
+        "99": ["C33", "C40", "C69", "C93"]
+    },
+    "field_structure": {
+        "structure": ["field_code", "message_length", "value", "separador_campo"],
+        "field_code": {"value": null, "max_length": 2, "description": "Codigo del campo"},
+        "message_length": {"value": null, "max_length": 2, "description": "Utilizado para representar la longitud del valor"},
+        "value": {"value": null, "max_length": "variable", "description": "El valor que corresponde a un campo"},
+        "separador_campo": {"value": "1C", "max_length": 1, "description": "FS, Separador de Campo"}
+    },
+    "fields_definition": {
+        "C00": {"label": "Codigo Respuesta", "description": "cod_respuesta" ,"data_type": "N", "max_length": 2},
+        "C01": {"label": "Codigo Autorizacion", "description": "cod_autorizacion" ,"data_type": "ANS", "max_length": 6},
+        "C03": {"label": "POS Entry Mode", "description": "pos_entry_mode" ,"data_type": "N", "max_length": 3},
+        "C11": {"label": "Referencia Movil", "description": "referencia_movil" ,"data_type": "ANS", "max_length": 10},
+        "C30": {"label": "Nro. Tarjeta", "description": "tarjeta" ,"data_type": "ANS", "max_length": 12},
+        "C33": {"label": "Codigo Cajero", "description": "cod_cajero" ,"data_type": "ANS", "max_length": 10},
+        "C34": {"label": "Tipo Cuenta", "description": "tipo_cuenta" ,"data_type": "ANS", "max_length": 2},
+        "C35": {"label": "Franquicia", "description": "franquicia" ,"data_type": "ANS", "max_length": 10},
+        "C40": {"label": "Monto Transaccion", "description": "monto_transaccion" ,"data_type": "N", "max_length": 12},
+        "C41": {"label": "I.V.A", "description": "iva_transaccion" ,"data_type": "N", "max_length": 12},
+        "C42": {"label": "B. Devolucion", "description": "base_devolucion" ,"data_type": "N", "max_length": 12},
+        "C43": {"label": "Propina", "description": "propina" ,"data_type": "N", "max_length": 12},
+        "C44": {"label": "Impuesto Consumo", "description": "impuesto_consumo" ,"data_type": "N", "max_length": 12},
+        "C65": {"label": "Nro. Recibo", "description": "nro_recibo" ,"data_type": "N", "max_length": 6},
+        "C66": {"label": "Nro. Factura", "description": "nro_factura" ,"data_type": "ANS", "max_length": 10},
+        "C67": {"label": "Cuotas", "description": "cuotas" ,"data_type": "ANS", "max_length": 2},
+        "C68": {"label": "Tipo Autorizador", "description": "tipo_autorizador" ,"data_type": "N", "max_length": 1},
+        "C69": {"label": "Tipo Documento", "description": "tipo_documento" ,"data_type": "N", "max_length": 2},
+        "C70": {"label": "Nro. Documento", "description": "nro_documento" ,"data_type": "N", "max_length": 11},
+        "C71": {"label": "Nro. Telefono", "description": "nro_telefono" ,"data_type": "ANS", "max_length": 7},
+        "C73": {"label": "Codigo Banco", "description": "cod_banco" ,"data_type": "N", "max_length": 2},
+        "C74": {"label": "Nro. Cuenta", "description": "nro_cuenta" ,"data_type": "ANS", "max_length": 13},
+        "C75": {"label": "Nro. Cheque", "description": "nro_cheque" ,"data_type": "ANS", "max_length": 6},
+        "C77": {"label": "RRN", "description": "rrn" ,"data_type": "N", "max_length": 6},
+        "C78": {"label": "Nro. Terminal", "description": "nro_terminal" ,"data_type": "ANS", "max_length": 8},
+        "C79": {"label": "Codigo Establecimiento", "description": "cod_establecimiento" ,"data_type": "ANS", "max_length": 23},
+        "C80": {"label": "Fecha", "description": "fecha" ,"data_type": "ANS", "max_length": 6},
+        "C81": {"label": "hora", "description": "hora" ,"data_type": "ANS", "max_length": 4},
+        "C82": {"label": "Detalles Cheque", "description": "detalles_cheque" ,"data_type": "ANS", "max_length": 10},
+        "C84": {"label": "Clave Supervisor", "description": "clave_supervisor" ,"data_type": "ANS", "max_length": 4},
+        "C89": {"label": "Codigo Operador", "description": "cod_operador" ,"data_type": "N", "max_length": 4},
+        "C90": {"label": "Trackll", "description": "trackll" ,"data_type": "ANS", "max_length": 15},
+        "C91": {"label": "Pagare", "description": "pagare" ,"data_type": "ANS", "max_length": 15},
+        "C92": {"label": "Pre-Autorizacion", "description": "pre_autorizacion" ,"data_type": "ANS", "max_length": 3},
+        "C93": {"label": "Factura Pago", "description": "factura_pago" ,"data_type": "ANS", "max_length": 30},
+        "C94": {"label": "Info. Operacion", "description": "info_operacion" ,"data_type": "ANS", "max_length": 30},
+        "C95": {"label": "Descuento Transaccion", "description": "descuento_transaccion" ,"data_type": "ANS", "max_length": 12},
+        "C96": {"label": "Clave Usuario", "description": "clave_usuario" ,"data_type": "ANS", "max_length": 6}
+    }
+}
